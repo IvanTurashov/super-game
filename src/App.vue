@@ -5,15 +5,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { defineComponent } from '@vue/composition-api';
 import Game from './components/Game.vue';
 
-@Component({
+export default defineComponent({
+  name: 'App',
   components: {
     Game,
   },
-})
-export default class App extends Vue {}
+});
 </script>
 
 <style>
