@@ -1,23 +1,32 @@
 <template>
-  <canvas></canvas>
+  <canvas
+    ref="canvas"
+  />
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { defineComponent, onMounted, ref } from '@vue/composition-api';
 
-@Component
-export default class Game extends Vue {
-  mounted() {
-    this.init();
-  }
+export default defineComponent({
+  name: 'Game',
+  setup() {
+    const canvas = ref<HTMLCanvasElement | null>(null);
 
-  init(): void {
-    const canvas = this.$el;
+    const init = () => {
+      if (canvas.value) {
+        canvas.value.width = 500;
+        canvas.value.height = 500;
+      }
+    };
+    onMounted(() => {
+      init();
+    });
 
-    canvas.width = this.$parent.$el.clientWidth;
-    canvas.height = this.$parent.$el.clientHeight;
-  }
-}
+    return {
+      canvas,
+    };
+  },
+});
 </script>
 
 <style scoped>
