@@ -1,5 +1,5 @@
 export interface CoreGame {
-  render(): void;
+  addTarget(): void;
 }
 
 export interface GameConfig {
