@@ -30,7 +30,7 @@ export default defineComponent({
     const game = ref<CoreGame>(null);
 
     const init = () => {
-      const ctx = canvas.value && canvas.value.getContext('2d');
+      const ctx = canvas?.value?.getContext('2d');
       if (ctx) {
         game.value = new Game(ctx, gameConfig);
       }
@@ -40,7 +40,8 @@ export default defineComponent({
     });
 
     const addTarget = () => {
-      if (game.value) game.value.addTarget();
+      // eslint-disable-next-line no-unused-expressions
+      game?.value?.addTarget();
     };
 
     return {

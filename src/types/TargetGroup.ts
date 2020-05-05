@@ -1,7 +1,7 @@
 import { TargetFigure } from '@/types/Target';
 
 export interface TargetGroupCore {
-  targets: Array<TargetFigure>,
+  targets: Array<TargetFigure>;
 
-  add(targetFigure: TargetFigure): void,
+  add(targetFigure: TargetFigure): void;
 }
