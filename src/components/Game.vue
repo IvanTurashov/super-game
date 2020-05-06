@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <canvas
@@ -11,6 +12,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { defineComponent, onMounted, ref } from '@vue/composition-api';
 import Game from '@/Game/CoreGame';
 import { CoreGame } from '@/types/Core';
@@ -30,18 +32,16 @@ export default defineComponent({
     const game = ref<CoreGame>(null);
 
     const init = () => {
-      const ctx = canvas?.value?.getContext('2d');
-      if (ctx) {
-        game.value = new Game(ctx, gameConfig);
-      }
+      const ctx = canvas.value!.getContext('2d');
+      game.value = new Game(ctx!, gameConfig);
     };
+
     onMounted(() => {
       init();
     });
 
     const addTarget = () => {
-      // eslint-disable-next-line no-unused-expressions
-      game?.value?.addTarget();
+      game.value!.addTarget();
     };
 
     return {

@@ -1,8 +1,9 @@
 import {
   TargetCore,
   TargetFigure,
-  TargetCoordinates,
 } from '@/types/Target';
+import { Vector2D } from '@/types/common';
+
 import { gameConfig, targetSize } from '@/gameConfig';
 
 export default class Target implements TargetCore {
@@ -12,7 +13,7 @@ export default class Target implements TargetCore {
     this.key = '';
   }
 
-  private static get targetCoords(): TargetCoordinates {
+  private static get targetCoords(): Vector2D {
     return {
       x: Math.round(Math.random() * (gameConfig.width - targetSize.width)),
       y: Math.round(Math.random() * (gameConfig.height - targetSize.height)),
