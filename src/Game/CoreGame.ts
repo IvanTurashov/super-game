@@ -35,7 +35,15 @@ class Game implements CoreGame {
         height: 100,
       },
     );
-    this.player.render();
+    this.render();
+  }
+
+  render() {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.player!.render();
+    window.requestAnimationFrame(() => {
+      this.render();
+    });
   }
 
   addTarget() {
