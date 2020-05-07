@@ -1,6 +1,6 @@
 export interface ObjectSize {
     width: number;
-    height: number;
+  height: number;
 }
 
 export interface Vector2D {
