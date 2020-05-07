@@ -4,7 +4,7 @@ export interface ObjectSize {
 }
 
 export interface Vector2D {
-    x: number;
+  x: number;
   y: number;
 }
 
