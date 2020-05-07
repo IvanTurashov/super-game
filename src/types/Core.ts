@@ -3,6 +3,6 @@ export interface CoreGame {
 }
 
 export interface GameConfig {
-   width: number;
+  width: number;
   height: number;
 }

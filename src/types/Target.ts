@@ -1,18 +1,10 @@
+import { ObjectSize, Vector2D } from './common';
+
 export interface TargetCore {
   create(): TargetFigure;
 }
 
-export interface TargetSize {
-  width: number;
-  height: number;
-}
-
-export interface TargetCoordinates {
-  x: number;
-  y: number;
-}
-
-export interface TargetFigure extends TargetSize {
+export interface TargetFigure extends ObjectSize {
   key: string;
-  coords: TargetCoordinates;
+  coords: Vector2D;
 }

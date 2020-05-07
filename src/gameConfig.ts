@@ -1,6 +1,6 @@
 export const gameConfig = {
-  width: 500,
-  height: 500,
+  width: 1024,
+  height: 768,
 };
 
 export const targetSize = {
