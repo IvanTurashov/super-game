@@ -1,5 +1,5 @@
 export interface ObjectSize {
-    width: number;
+  width: number;
   height: number;
 }
 
