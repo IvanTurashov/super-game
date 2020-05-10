@@ -1,22 +1,24 @@
 import { CoreGame, GameConfig } from '@/types/Core';
 import { GameObject } from '@/types/common';
 import Target from '@/Game/Target';
-import TargetGroup from '@/Game/TargetGroup';
 import Player from '@/Game/Player';
+import Bullet from '@/Game/Bullet';
+import Group from '@/Game/Group';
+import Collision from '@/Game/Collision';
 
 class Game implements CoreGame {
   private canvasCtx: CanvasRenderingContext2D;
 
   private gameConfig: GameConfig;
 
-  private targetGroup: TargetGroup;
+  private targets: Group;
 
-  private player: GameObject | undefined
+  private player: GameObject | undefined;
 
   constructor(canvasCtx: CanvasRenderingContext2D, gameConfig: GameConfig) {
     this.canvasCtx = canvasCtx;
     this.gameConfig = gameConfig;
-    this.targetGroup = new TargetGroup(this.canvasCtx);
+    this.targets = new Group();
 
     this.init();
   }
@@ -38,18 +40,23 @@ class Game implements CoreGame {
     this.render();
   }
 
+  static shoot() {
+    console.log('Попал!');
+  }
+
   render() {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.player!.render();
+    Collision.checkCollision(this.player.bullets, this.targets, Game.shoot);
     window.requestAnimationFrame(() => {
       this.render();
     });
   }
 
   addTarget() {
-    const target = new Target(this.canvasCtx).create();
+    const target = new Target(this.canvasCtx);
 
-    this.targetGroup.add(target);
+    target.render();
+    this.targets.add(target);
   }
 }
 

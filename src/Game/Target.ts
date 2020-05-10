@@ -1,11 +1,10 @@
-import { TargetFigure, TargetObject } from '@/types/Target';
-import { ObjectSize, Vector2D } from '@/types/common';
+import { GameObject, ObjectSize, Vector2D } from '@/types/common';
 import { gameConfig, targetSize } from '@/gameConfig';
 
-export default class Target implements TargetObject {
-  private key: string;
-
+export default class Target implements GameObject {
   private canvasCtx: CanvasRenderingContext2D
+
+  key: string;
 
   size: ObjectSize;
 
@@ -16,22 +15,13 @@ export default class Target implements TargetObject {
     this.size = targetSize;
     this.position = this.targetPosition;
     this.canvasCtx = ctx;
+    this.key = prompt('Input name of target. Quickly!') || '';
   }
 
   private get targetPosition(): Vector2D {
     return {
       x: Math.round(Math.random() * (gameConfig.width - this.size.width)),
       y: Math.round(Math.random() * (gameConfig.height - this.size.height)),
-    };
-  }
-
-  create(): TargetFigure {
-    this.key = prompt('Input name of target. Quickly!') || '';
-
-    return {
-      size: this.size,
-      position: this.position,
-      key: this.key,
     };
   }
 

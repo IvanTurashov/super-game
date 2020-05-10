@@ -8,11 +8,16 @@ export interface Vector2D {
   y: number;
 }
 
-export interface GameFigure {
+export interface GameObject {
+  key?: string;
+  bullets?: Array<GameObject>;
   position: Vector2D;
   size: ObjectSize;
+  render(): void;
 }
 
-export interface GameObject extends GameFigure {
-    render(): void;
+export interface GameGroup {
+  objects: Array<GameObject>;
+
+  add(gameObject: GameObject): void;
 }
