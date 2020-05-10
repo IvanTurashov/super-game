@@ -47,7 +47,7 @@ class Game implements CoreGame {
   }
 
   addTarget() {
-    const target = new Target().create();
+    const target = new Target(this.canvasCtx).create();
 
     this.targetGroup.add(target);
   }

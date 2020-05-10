@@ -8,9 +8,11 @@ export interface Vector2D {
   y: number;
 }
 
+export interface GameFigure {
+  position: Vector2D;
+  size: ObjectSize;
+}
 
-export interface GameObject {
-    position: Vector2D;
-    size: ObjectSize;
+export interface GameObject extends GameFigure {
     render(): void;
 }

@@ -11,17 +11,7 @@ export default class TargetGroup implements TargetGroupCore {
     this.targets = [];
   }
 
-  add(targetFigure: TargetFigure): void {
-    this.targets.push(targetFigure);
-
-    this.canvasCtx.beginPath();
-    this.canvasCtx.rect(
-      targetFigure.coords.x,
-      targetFigure.coords.y,
-      targetFigure.width,
-      targetFigure.height,
-    );
-    this.canvasCtx.fillStyle = 'blue';
-    this.canvasCtx.fill();
+  add(target: TargetFigure): void {
+    this.targets.push(target);
   }
 }

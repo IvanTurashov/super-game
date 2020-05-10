@@ -1,10 +1,9 @@
-import { ObjectSize, Vector2D } from './common';
+import { GameFigure, GameObject } from './common';
 
-export interface TargetCore {
-  create(): TargetFigure;
+export interface TargetFigure extends GameFigure {
+  key: string;
 }
 
-export interface TargetFigure extends ObjectSize {
-  key: string;
-  coords: Vector2D;
+export interface TargetObject extends GameObject {
+  create(): TargetFigure;
 }
