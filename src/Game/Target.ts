@@ -11,7 +11,6 @@ export default class Target implements GameObject {
   position: Vector2D;
 
   constructor(ctx: CanvasRenderingContext2D) {
-    this.key = '';
     this.size = targetSize;
     this.position = this.targetPosition;
     this.canvasCtx = ctx;
