@@ -7,7 +7,7 @@ class Player implements GameObject {
 
     position: Vector2D
 
-    private bullets: Array<GameObject> = []
+    bullets: Array<GameObject> = []
 
     private weaponPosition: Vector2D
 

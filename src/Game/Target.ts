@@ -1,32 +1,38 @@
-import {
-  TargetCore,
-  TargetFigure,
-} from '@/types/Target';
-import { Vector2D } from '@/types/common';
-
+import { GameObject, ObjectSize, Vector2D } from '@/types/common';
 import { gameConfig, targetSize } from '@/gameConfig';
 
-export default class Target implements TargetCore {
-  private key: string;
+export default class Target implements GameObject {
+  private canvasCtx: CanvasRenderingContext2D
 
-  constructor() {
-    this.key = '';
-  }
+  key: string;
 
-  private static get targetCoords(): Vector2D {
-    return {
-      x: Math.round(Math.random() * (gameConfig.width - targetSize.width)),
-      y: Math.round(Math.random() * (gameConfig.height - targetSize.height)),
-    };
-  }
+  size: ObjectSize;
 
-  create(): TargetFigure {
+  position: Vector2D;
+
+  constructor(ctx: CanvasRenderingContext2D) {
+    this.size = targetSize;
+    this.position = this.targetPosition;
+    this.canvasCtx = ctx;
     this.key = prompt('Input name of target. Quickly!') || '';
+  }
 
+  private get targetPosition(): Vector2D {
     return {
-      ...targetSize,
-      coords: Target.targetCoords,
-      key: this.key,
+      x: Math.round(Math.random() * (gameConfig.width - this.size.width)),
+      y: Math.round(Math.random() * (gameConfig.height - this.size.height)),
     };
+  }
+
+  render(): void {
+    this.canvasCtx.beginPath();
+    this.canvasCtx.rect(
+      this.position.x,
+      this.position.y,
+      this.size.width,
+      this.size.height,
+    );
+    this.canvasCtx.fillStyle = 'blue';
+    this.canvasCtx.fill();
   }
 }
