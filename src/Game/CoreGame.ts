@@ -1,3 +1,4 @@
+import { bind } from 'decko';
 import { CoreGame, GameConfig } from '@/types/Core';
 import { GameObject } from '@/types/common';
 import Target from '@/Game/Target';
@@ -11,19 +12,13 @@ class Game implements CoreGame {
 
   private gameConfig: GameConfig;
 
-  private targets: Group;
+  private targets: Array<GameObject> = [];
 
-  private player: GameObject | undefined;
+  private player: Player;
 
   constructor(canvasCtx: CanvasRenderingContext2D, gameConfig: GameConfig) {
     this.canvasCtx = canvasCtx;
     this.gameConfig = gameConfig;
-    this.targets = new Group();
-
-    this.init();
-  }
-
-  private init() {
     this.canvasCtx.canvas.width = this.gameConfig.width;
     this.canvasCtx.canvas.height = this.gameConfig.height;
     this.player = new Player(
@@ -40,13 +35,17 @@ class Game implements CoreGame {
     this.render();
   }
 
-  static shoot() {
-    console.log('Попал!');
+  @bind
+  shoot(bullet: GameObject, target: GameObject) {
+    this.player.destroyBullet(bullet);
+    this.targets = this.targets.filter((t) => t !== target);
   }
 
   render() {
-    this.player!.render();
-    Collision.checkCollision(this.player.bullets, this.targets, Game.shoot);
+    this.canvasCtx.clearRect(0, 0, this.gameConfig.width, this.gameConfig.height);
+    this.player.render();
+    this.renderTargets();
+    Collision.checkCollision(this.player.bullets, this.targets, this.shoot);
     window.requestAnimationFrame(() => {
       this.render();
     });
@@ -54,9 +53,13 @@ class Game implements CoreGame {
 
   addTarget() {
     const target = new Target(this.canvasCtx);
+    this.targets.push(target);
+  }
 
-    target.render();
-    this.targets.add(target);
+  renderTargets() {
+    this.targets.forEach((t) => {
+      t.render();
+    });
   }
 }
 
