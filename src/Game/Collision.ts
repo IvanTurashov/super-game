@@ -6,18 +6,25 @@ export default class Collision {
     objects2: Array<GameObject>,
     onCollide: (obj1: GameObject, obj2: GameObject) => void,
   ): void {
-    objects1.forEach((obj1) => {
-      objects2.forEach((obj2) => {
-        const inXRange = (
-          ((obj1.position.x + obj1.size.width) > obj2.position.x)
-          && ((obj1.position.x + obj1.size.width) < (obj2.position.x + obj2.size.width))
-        );
-        const inYRange = (
-          (obj1.position.y > obj2.position.y)
-          && (obj1.position.y < (obj2.position.y + obj2.size.height))
-        );
+    objects1.forEach((objA) => {
+      objects2.forEach((objB) => {
+        const rightSideObjA = objA.position.x + objA.size.width;
+        const leftSideObjA = objA.position.x;
+        const topSideObjA = objA.position.y;
+        const bottomSideObjA = objA.position.y + objA.size.height;
 
-        if (inXRange && inYRange) onCollide(obj1, obj2);
+        const rightSideObjB = objB.position.x + objB.size.width;
+        const leftSideObjB = objB.position.x;
+        const topSideObjB = objB.position.y;
+        const bottomSideObjB = objB.position.y + objB.size.height;
+
+        const inXRange = (rightSideObjA > leftSideObjB && rightSideObjA < rightSideObjB)
+        || (leftSideObjA < rightSideObjB && leftSideObjA > leftSideObjB);
+
+        const inYRange = (topSideObjA < bottomSideObjB && topSideObjA > topSideObjB)
+        || (bottomSideObjA > topSideObjB && bottomSideObjA < bottomSideObjB);
+
+        if (inXRange && inYRange) onCollide(objA, objB);
       });
     });
   }
