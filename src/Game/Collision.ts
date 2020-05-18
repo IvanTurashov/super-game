@@ -2,12 +2,12 @@ import { GameObject } from '@/types/common';
 
 export default class Collision {
   static checkCollision(
-    objects1: Array<GameObject>,
-    objects2: Array<GameObject>,
+    objectsA: Array<GameObject>,
+    objectsB: Array<GameObject>,
     onCollide: (obj1: GameObject, obj2: GameObject) => void,
   ): void {
-    objects1.forEach((objA) => {
-      objects2.forEach((objB) => {
+    objectsA.forEach((objA) => {
+      objectsB.forEach((objB) => {
         const rightSideObjA = objA.position.x + objA.size.width;
         const leftSideObjA = objA.position.x;
         const topSideObjA = objA.position.y;
