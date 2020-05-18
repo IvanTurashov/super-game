@@ -87,6 +87,11 @@ class Player implements GameObject {
       }
 
       this.bullets.forEach((b) => {
+        const isBulletLost = this.checkLostBullet(b);
+        if (isBulletLost) {
+          this.destroyBullet(b);
+          return;
+        }
         b.render();
       });
     }
@@ -105,6 +110,28 @@ class Player implements GameObject {
       };
       const bullet = new Bullet(this.canvasCtx, bulletPosition, direction);
       this.bullets.push(bullet);
+    }
+
+    destroyBullet(bullet: GameObject) {
+      this.bullets = this.bullets.filter((b) => b !== bullet);
+    }
+
+    checkLostBullet(bullet: GameObject) {
+      if (
+        (bullet.position.x + bullet.size.width) < 0
+        || bullet.position.x > this.canvasCtx.canvas.width
+      ) {
+        return true;
+      }
+
+      if (
+        (bullet.position.y + bullet.size.height) < 0
+        || (bullet.position.y > this.canvasCtx.canvas.height)
+      ) {
+        return true;
+      }
+
+      return false;
     }
 }
 

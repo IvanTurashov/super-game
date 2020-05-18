@@ -24,13 +24,6 @@ class Bullet implements GameObject {
     }
 
     render() {
-      this.canvasCtx.clearRect(
-        this.position.x - 1,
-        this.position.y - 1,
-        this.size.width + 2,
-        this.size.height + 2,
-      );
-
       this.position.x += this.velocity.x;
       this.position.y += this.velocity.y;
 

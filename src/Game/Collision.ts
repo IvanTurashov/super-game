@@ -1,20 +1,30 @@
-import { GameGroup, GameObject } from '@/types/common';
-import Bullet from '@/Game/Bullet';
+import { GameObject } from '@/types/common';
 
 export default class Collision {
-  static checkCollision(group1: Array<GameObject>, group2: GameGroup, onCollide: () => void): void {
-    group1.forEach((obj1) => {
-      group2.objects.forEach((obj2) => {
-        const inXRange = (
-          obj1.position.x + obj1.size.width > obj2.position.x
-          && obj1.position.x + obj1.size.width < obj2.position.x + obj1.size.width
-        );
-        const inYRange = (
-          obj1.position.y + obj1.size.height > obj2.position.y
-          && obj1.position.y + obj1.size.height < obj2.position.y + obj2.size.height
-        );
+  static checkCollision(
+    objectsA: Array<GameObject>,
+    objectsB: Array<GameObject>,
+    onCollide: (obj1: GameObject, obj2: GameObject) => void,
+  ): void {
+    objectsA.forEach((objA) => {
+      objectsB.forEach((objB) => {
+        const rightSideObjA = objA.position.x + objA.size.width;
+        const leftSideObjA = objA.position.x;
+        const topSideObjA = objA.position.y;
+        const bottomSideObjA = objA.position.y + objA.size.height;
 
-        if (inXRange && inYRange) onCollide();
+        const rightSideObjB = objB.position.x + objB.size.width;
+        const leftSideObjB = objB.position.x;
+        const topSideObjB = objB.position.y;
+        const bottomSideObjB = objB.position.y + objB.size.height;
+
+        const inXRange = (rightSideObjA > leftSideObjB && rightSideObjA < rightSideObjB)
+        || (leftSideObjA < rightSideObjB && leftSideObjA > leftSideObjB);
+
+        const inYRange = (topSideObjA < bottomSideObjB && topSideObjA > topSideObjB)
+        || (bottomSideObjA > topSideObjB && bottomSideObjA < bottomSideObjB);
+
+        if (inXRange && inYRange) onCollide(objA, objB);
       });
     });
   }
