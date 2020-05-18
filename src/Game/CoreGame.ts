@@ -3,14 +3,10 @@ import { CoreGame, GameConfig } from '@/types/Core';
 import { GameObject } from '@/types/common';
 import Target from '@/Game/Target';
 import Player from '@/Game/Player';
-import Bullet from '@/Game/Bullet';
-import Group from '@/Game/Group';
 import Collision from '@/Game/Collision';
 
 class Game implements CoreGame {
   private canvasCtx: CanvasRenderingContext2D;
-
-  private gameConfig: GameConfig;
 
   private targets: Array<GameObject> = [];
 
@@ -18,9 +14,8 @@ class Game implements CoreGame {
 
   constructor(canvasCtx: CanvasRenderingContext2D, gameConfig: GameConfig) {
     this.canvasCtx = canvasCtx;
-    this.gameConfig = gameConfig;
-    this.canvasCtx.canvas.width = this.gameConfig.width;
-    this.canvasCtx.canvas.height = this.gameConfig.height;
+    this.canvasCtx.canvas.width = gameConfig.width;
+    this.canvasCtx.canvas.height = gameConfig.height;
     this.player = new Player(
       this.canvasCtx,
       {
@@ -42,7 +37,9 @@ class Game implements CoreGame {
   }
 
   render() {
-    this.canvasCtx.clearRect(0, 0, this.gameConfig.width, this.gameConfig.height);
+    const { canvas } = this.canvasCtx;
+
+    this.canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
     this.player.render();
     this.renderTargets();
     Collision.checkCollision(this.player.bullets, this.targets, this.shoot);
@@ -51,8 +48,8 @@ class Game implements CoreGame {
     });
   }
 
-  addTarget() {
-    const target = new Target(this.canvasCtx);
+  addTarget(key: string) {
+    const target = new Target(this.canvasCtx, key);
     this.targets.push(target);
   }
 

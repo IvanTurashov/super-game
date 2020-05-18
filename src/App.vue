@@ -5,6 +5,9 @@
 </template>
 
 <script lang="ts">
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
+
 import { defineComponent } from '@vue/composition-api';
 import Game from './components/Game.vue';
 
