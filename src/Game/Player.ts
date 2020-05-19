@@ -47,21 +47,34 @@ class Player implements GameObject {
     }
 
     renderWeapon() {
-      this.canvasCtx.beginPath();
+      this.canvasCtx.save();
       // this.canvasCtx.translate(
       //   this.weaponPosition.x + this.weaponSize.width / 2,
       //   this.weaponPosition.y + this.weaponSize.height / 2,
       // );
-      // this.canvasCtx.rotate((this.angleWeapon * Math.PI) / 180);
+      const weaponCenter: Vector2D = {
+        x: this.weaponPosition.x + this.weaponSize.width / 2,
+        y: this.weaponPosition.y + this.weaponSize.height / 2,
+      };
+      this.canvasCtx.translate(
+        weaponCenter.x,
+        weaponCenter.y,
+      );
+      console.log(this.angleWeapon * (180 / Math.PI));
+      this.canvasCtx.rotate(this.angleWeapon * (180 / Math.PI));
+      this.canvasCtx.translate(
+        -weaponCenter.x,
+        -weaponCenter.y,
+      );
+      this.canvasCtx.fillStyle = 'black';
       this.canvasCtx.rect(
         this.weaponPosition.x,
         this.weaponPosition.y,
         this.weaponSize.width,
         this.weaponSize.height,
       );
-      this.canvasCtx.fillStyle = 'black';
       this.canvasCtx.fill();
-      // this.canvasCtx.setTransform(1, 0, 0, 1, 0, 0);
+      this.canvasCtx.restore();
     }
 
     initEvents() {
@@ -75,10 +88,14 @@ class Player implements GameObject {
 
     @debounce(30)
     rotateWeapon(mousePosition: Vector2D) {
-      this.angleWeapon = Math.atan2(
-        mousePosition.x - this.weaponPosition.x,
+      let angle = Math.atan2(
         mousePosition.y - this.weaponPosition.y,
+        mousePosition.x - this.weaponPosition.x,
       );
+      if (angle < 0) {
+        angle = -angle;
+      }
+      this.angleWeapon = angle;
     }
 
     renderBullets() {
