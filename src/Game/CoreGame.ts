@@ -49,7 +49,7 @@ class Game implements CoreGame {
   }
 
   addTarget(key: string) {
-    const target = new Target(this.canvasCtx, key);
+    const target = Target.create(this.canvasCtx, key);
     this.targets.push(target);
   }
 

@@ -35,4 +35,8 @@ export default class Target implements GameObject {
     this.canvasCtx.fillStyle = 'blue';
     this.canvasCtx.fill();
   }
+
+  static create(ctx: CanvasRenderingContext2D, key: string) {
+    return new Target(ctx, key);
+  }
 }
