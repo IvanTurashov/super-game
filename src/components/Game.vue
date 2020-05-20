@@ -1,23 +1,12 @@
 <template>
-  <b-container fluid>
-    <b-row>
-      <div class="w-75">
-        <canvas
-          ref="canvas"
-        />
-      </div>
-
-      <b-col>
-        <target-creator @add-targets="addTargets" />
-      </b-col>
-    </b-row>
-  </b-container>
+  <canvas
+    ref="canvas"
+  />
 </template>
 
 <script lang="ts">
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { defineComponent, onMounted, ref } from '@vue/composition-api';
-import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import Game from '@/Game/CoreGame';
 import { CoreGame } from '@/types/Core';
 
@@ -28,33 +17,35 @@ export default defineComponent({
 
   components: {
     TargetCreator,
-    BContainer,
-    BRow,
-    BCol,
   },
 
-  setup() {
+  props: {
+    targets: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  setup(
+    { targets }: { targets: Array<string> },
+  ) {
     const canvas = ref<HTMLCanvasElement | null>(null);
     const game = ref<CoreGame>(null);
 
     const init = () => {
       const ctx = canvas.value!.getContext('2d');
-      const { width } = canvas.value!.parentElement!.getBoundingClientRect();
+      const { innerWidth: width, innerHeight: height } = window;
 
-      game.value = new Game(ctx!, { width, height: window.innerHeight });
+      game.value = new Game(ctx!, { width, height });
+      targets.forEach((target) => game.value!.addTarget(target));
     };
 
     onMounted(() => {
       init();
     });
 
-    const addTargets = (targets: Array<string>) => {
-      targets.forEach((target) => game.value!.addTarget(target));
-    };
-
     return {
       canvas,
-      addTargets,
     };
   },
 });

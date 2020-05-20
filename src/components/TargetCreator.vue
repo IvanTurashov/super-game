@@ -1,5 +1,7 @@
 <template>
-  <b-form @submit.prevent="addTargets">
+  <b-form
+    @submit.prevent="addTargets"
+  >
     <label>Type a new user and press enter</label>
 
     <b-form-tags
@@ -10,15 +12,10 @@
 
     <b-button
       class="mr-2"
+      variant="success"
       type="submit"
     >
-      Add targets
-    </b-button>
-
-    <b-button
-      @click="reset"
-    >
-      Reset
+      Let's play!
     </b-button>
   </b-form>
 </template>
@@ -41,19 +38,13 @@ export default defineComponent({
   setup(props, { emit }) {
     const targets = ref([]);
 
-    const reset = () => {
-      targets.value = [];
-    };
-
     const addTargets = () => {
-      emit('add-targets', targets.value);
-      reset();
+      emit('input', targets.value);
     };
 
     return {
       targets,
       addTargets,
-      reset,
     };
   },
 });
