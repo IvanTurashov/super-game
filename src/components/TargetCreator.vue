@@ -2,18 +2,18 @@
   <b-form
     @submit.prevent="addTargets"
   >
-    <label>Type a new user and press enter</label>
-
     <b-form-tags
       ref="tagsInput"
       v-model="targets"
       class="mb-2"
+      placeholder="Добавить названия целей"
     />
 
     <b-button
       class="mr-2"
       variant="success"
       type="submit"
+      block
     >
       Let's play!
     </b-button>
