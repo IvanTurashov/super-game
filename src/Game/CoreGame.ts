@@ -1,9 +1,9 @@
 import { bind } from 'decko';
 import { CoreGame, GameConfig } from '@/types/Core';
 import { GameObject } from '@/types/common';
-import Target from '@/Game/Target';
 import Player from '@/Game/Player';
 import Collision from '@/Game/Collision';
+import TargetFactory from '@/Game/TargetFactory';
 
 class Game implements CoreGame {
   private canvasCtx: CanvasRenderingContext2D;
@@ -12,10 +12,13 @@ class Game implements CoreGame {
 
   private player: Player;
 
+  private targetFactory: TargetFactory;
+
   constructor(canvasCtx: CanvasRenderingContext2D, gameConfig: GameConfig) {
     this.canvasCtx = canvasCtx;
     this.canvasCtx.canvas.width = gameConfig.width;
     this.canvasCtx.canvas.height = gameConfig.height;
+    this.targetFactory = new TargetFactory(canvasCtx);
     this.player = new Player(
       this.canvasCtx,
       {
@@ -49,7 +52,7 @@ class Game implements CoreGame {
   }
 
   addTarget(key: string) {
-    const target = Target.create(this.canvasCtx, key);
+    const target = this.targetFactory.create(key);
     this.targets.push(target);
   }
 

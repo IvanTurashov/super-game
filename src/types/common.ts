@@ -21,3 +21,7 @@ export interface GameGroup {
 
   add(gameObject: GameObject): void;
 }
+
+export interface Factory {
+  create(key: string): GameObject;
+}
