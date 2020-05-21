@@ -1,14 +1,7 @@
-
 <template>
-  <div>
-    <canvas
-      ref="canvas"
-    />
-
-    <target-creator
-      @click="addTarget"
-    />
-  </div>
+  <canvas
+    ref="canvas"
+  />
 </template>
 
 <script lang="ts">
@@ -18,7 +11,6 @@ import Game from '@/Game/CoreGame';
 import { CoreGame } from '@/types/Core';
 
 import TargetCreator from '@/components/TargetCreator.vue';
-import { gameConfig } from '@/gameConfig.ts';
 
 export default defineComponent({
   name: 'Game',
@@ -27,26 +19,33 @@ export default defineComponent({
     TargetCreator,
   },
 
-  setup() {
+  props: {
+    targets: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  setup(
+    { targets }: { targets: Array<string> },
+  ) {
     const canvas = ref<HTMLCanvasElement | null>(null);
     const game = ref<CoreGame>(null);
 
     const init = () => {
       const ctx = canvas.value!.getContext('2d');
-      game.value = new Game(ctx!, gameConfig);
+      const { innerWidth: width, innerHeight: height } = window;
+
+      game.value = new Game(ctx!, { width, height });
+      targets.forEach((target) => game.value!.addTarget(target));
     };
 
     onMounted(() => {
       init();
     });
 
-    const addTarget = () => {
-      game.value!.addTarget();
-    };
-
     return {
       canvas,
-      addTarget,
     };
   },
 });
@@ -54,6 +53,7 @@ export default defineComponent({
 
 <style scoped>
 canvas {
+  vertical-align: top;
   background-color: antiquewhite;
 }
 </style>

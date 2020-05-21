@@ -10,11 +10,11 @@ export default class Target implements GameObject {
 
   position: Vector2D;
 
-  constructor(ctx: CanvasRenderingContext2D) {
+  constructor(ctx: CanvasRenderingContext2D, key: string) {
     this.size = targetSize;
     this.position = this.targetPosition;
     this.canvasCtx = ctx;
-    this.key = prompt('Input name of target. Quickly!') || '';
+    this.key = key;
   }
 
   private get targetPosition(): Vector2D {
