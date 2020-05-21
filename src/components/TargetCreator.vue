@@ -1,16 +1,51 @@
 <template>
-  <button
-    type="button"
-    v-on="$listeners"
+  <b-form
+    @submit.prevent="addTargets"
   >
-    Add target
-  </button>
+    <b-form-tags
+      ref="tagsInput"
+      v-model="targets"
+      class="mb-2"
+      placeholder="Добавить названия целей"
+    />
+
+    <b-button
+      class="mr-2"
+      variant="success"
+      type="submit"
+      block
+    >
+      Let's play!
+    </b-button>
+  </b-form>
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api';
+import {
+  BFormTags, BButton, BForm,
+} from 'bootstrap-vue';
 
 export default defineComponent({
-  name: 'SpawnButton',
+  name: 'TargetsCreator',
+
+  components: {
+    BFormTags,
+    BButton,
+    BForm,
+  },
+
+  setup(props, { emit }) {
+    const targets = ref([]);
+
+    const addTargets = () => {
+      emit('input', targets.value);
+    };
+
+    return {
+      targets,
+      addTargets,
+    };
+  },
 });
 </script>
