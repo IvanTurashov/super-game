@@ -5,6 +5,7 @@ import Player from '@/Game/Player';
 import Collision from '@/Game/Collision';
 import TargetFactory from '@/Game/TargetFactory';
 
+
 class Game implements CoreGame {
   private canvasCtx: CanvasRenderingContext2D;
 
@@ -24,10 +25,6 @@ class Game implements CoreGame {
       {
         x: 50,
         y: this.canvasCtx.canvas.height - 150,
-      },
-      {
-        width: 50,
-        height: 100,
       },
     );
     this.render();
