@@ -7,6 +7,7 @@ import Bullet from '@/Game/Bullet';
 import Group from '@/Game/Group';
 import Collision from '@/Game/Collision';
 
+
 class Game implements CoreGame {
   private canvasCtx: CanvasRenderingContext2D;
 
@@ -26,10 +27,6 @@ class Game implements CoreGame {
       {
         x: 50,
         y: this.canvasCtx.canvas.height - 150,
-      },
-      {
-        width: 50,
-        height: 100,
       },
     );
     this.render();
