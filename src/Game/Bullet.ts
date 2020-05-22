@@ -10,7 +10,7 @@ class Bullet implements GameObject {
 
     private canvasCtx: CanvasRenderingContext2D
 
-    private speed = 6
+    private speed = 80
 
     private velocity: Vector2D
 
