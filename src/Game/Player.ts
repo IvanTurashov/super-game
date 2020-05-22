@@ -10,6 +10,7 @@ import * as Hend from '@/assets/player/1_hend.png';
 import * as Body from '@/assets/player/1_body.png';
 import * as Head from '@/assets/player/1_head.png';
 import * as Weapon from '@/assets/WEAPON.png';
+import * as ShotGun from '@/assets/shot gun.png';
 
 const sizes: Record<string, ObjectSize> = {
   leftArmImage: {
@@ -44,6 +45,10 @@ const sizes: Record<string, ObjectSize> = {
     width: 349,
     height: 272,
   },
+  shotGunImage: {
+    width: 138,
+    height: 193,
+  },
 };
 class Player implements GameObject {
     position: Vector2D
@@ -65,37 +70,25 @@ class Player implements GameObject {
 
     private weaponPosition: Vector2D
 
-    private leftArmImage: HTMLImageElement = new Image(
-      // sizes.leftArmImage.width, sizes.leftArmImage.height,
-    )
+    private leftArmImage: HTMLImageElement = new Image()
 
-    private rightArmImage: HTMLImageElement = new Image(
-      // sizes.rightArmImage.width, sizes.rightArmImage.height,
-    )
+    private rightArmImage: HTMLImageElement = new Image()
 
-    private leftLegImage: HTMLImageElement = new Image(
-      // sizes.leftLegImage.width, sizes.leftLegImage.height,
-    )
+    private leftLegImage: HTMLImageElement = new Image()
 
-    private rightLegImage: HTMLImageElement = new Image(
-      // sizes.rightLegImage.width, sizes.rightLegImage.height,
-    )
+    private rightLegImage: HTMLImageElement = new Image()
 
-    private bodyImage: HTMLImageElement = new Image(
-      // sizes.bodyImage.width, sizes.bodyImage.height,
-    )
+    private bodyImage: HTMLImageElement = new Image()
 
-    private headImage: HTMLImageElement = new Image(
-      // sizes.headImage.width, sizes.headImage.height,
-    )
+    private headImage: HTMLImageElement = new Image()
 
-    private hendImage: HTMLImageElement = new Image(
-      // sizes.hendImage.width, sizes.hendImage.height,
-    )
+    private hendImage: HTMLImageElement = new Image()
 
-    private weaponImage: HTMLImageElement = new Image(
-      // sizes.weaponImage.width, sizes.weaponImage.height,
-    )
+    private weaponImage: HTMLImageElement = new Image()
+
+    private shotGunImage: HTMLImageElement = new Image()
+
+    private lastShot = 0;
 
     constructor(canvasCtx: CanvasRenderingContext2D, position: Vector2D) {
       this.position = position;
@@ -109,6 +102,8 @@ class Player implements GameObject {
       this.headImage.src = Head.default;
       this.hendImage.src = Hend.default;
       this.weaponImage.src = Weapon.default;
+      this.shotGunImage.src = ShotGun.default;
+
       this.sizes = this.generateSizes(sizes);
       this.weaponPosition = {
         x: this.position.x + this.sizes.bodyImage.width,
@@ -136,6 +131,16 @@ class Player implements GameObject {
       this.canvasCtx.fill();
       this.renderPlayer();
       this.renderBullets();
+
+      if ((Date.now() - this.lastShot) < 100) {
+        this.canvasCtx.drawImage(
+          this.shotGunImage,
+          this.weaponPosition.x + this.sizes.weaponImage.width,
+          this.weaponPosition.y - this.sizes.weaponImage.height * 0.25,
+          this.sizes.shotGunImage.width,
+          this.sizes.shotGunImage.height,
+        );
+      }
     }
 
     renderPlayer() {
@@ -148,7 +153,7 @@ class Player implements GameObject {
       this.renderHead();
 
       this.renderRightArm();
-      // this.renderWeapon();
+      // this.renderLeftLeg();
     }
 
     renderBody() {
@@ -162,6 +167,10 @@ class Player implements GameObject {
     }
 
     renderLeftArm() {
+      const position = {
+        x: this.position.x + this.sizes.bodyImage.width * 0.8,
+        y: this.position.y + this.sizes.bodyImage.height * 0.25,
+      };
       this.canvasCtx.drawImage(
         this.leftArmImage,
         this.position.x + this.sizes.bodyImage.width * 0.8,
@@ -169,6 +178,7 @@ class Player implements GameObject {
         this.sizes.leftArmImage.width,
         this.sizes.leftArmImage.height,
       );
+      this.renderWeapon(position);
     }
 
     renderRightArm() {
@@ -192,27 +202,25 @@ class Player implements GameObject {
     }
 
     renderLeftLeg() {
-      const position = {
-        x: this.position.x + this.sizes.bodyImage.width * 0.55,
-        y: this.position.y + this.sizes.bodyImage.height * 0.75,
-      };
       this.canvasCtx.drawImage(
         this.leftLegImage,
-        position.x,
-        position.y,
+        this.position.x + this.sizes.bodyImage.width * 0.55,
+        this.position.y + this.sizes.bodyImage.height * 0.75,
         this.sizes.leftLegImage.width,
         this.sizes.leftLegImage.height,
       );
-
-      this.renderWeapon(position);
     }
 
 
-    renderWeapon(leftLegPosition: Vector2D) {
+    renderWeapon(leftArmPosition: Vector2D) {
+      this.weaponPosition = {
+        x: leftArmPosition.x + this.sizes.leftArmImage.width * 0.8,
+        y: this.position.y + 10,
+      };
       this.canvasCtx.drawImage(
         this.weaponImage,
-        leftLegPosition.x + this.sizes.leftLegImage.width * 1.5,
-        this.position.y + 10,
+        this.weaponPosition.x,
+        this.weaponPosition.y,
         this.sizes.weaponImage.width,
         this.sizes.weaponImage.height,
       );
@@ -227,11 +235,6 @@ class Player implements GameObject {
         this.sizes.headImage.height,
       );
     }
-
-
-    // renderWeapon() {
-    //   console.log(this.weaponImage);
-    // }
 
     initEvents() {
       this.canvasCtx.canvas.addEventListener('click', (event) => {
@@ -266,6 +269,8 @@ class Player implements GameObject {
     }
 
     addBullet(targetPosition: Vector2D) {
+      this.lastShot = Date.now();
+
       const bulletPosition: Vector2D = {
         x: this.weaponPosition.x + this.sizes.weaponImage.width,
         y: this.weaponPosition.y,
