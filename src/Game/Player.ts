@@ -167,6 +167,10 @@ class Player implements GameObject {
     }
 
     renderLeftArm() {
+      const position = {
+        x: this.position.x + this.sizes.bodyImage.width * 0.8,
+        y: this.position.y + this.sizes.bodyImage.height * 0.25,
+      };
       this.canvasCtx.drawImage(
         this.leftArmImage,
         this.position.x + this.sizes.bodyImage.width * 0.8,
@@ -174,6 +178,7 @@ class Player implements GameObject {
         this.sizes.leftArmImage.width,
         this.sizes.leftArmImage.height,
       );
+      this.renderWeapon(position);
     }
 
     renderRightArm() {
@@ -197,25 +202,19 @@ class Player implements GameObject {
     }
 
     renderLeftLeg() {
-      const position = {
-        x: this.position.x + this.sizes.bodyImage.width * 0.55,
-        y: this.position.y + this.sizes.bodyImage.height * 0.75,
-      };
       this.canvasCtx.drawImage(
         this.leftLegImage,
-        position.x,
-        position.y,
+        this.position.x + this.sizes.bodyImage.width * 0.55,
+        this.position.y + this.sizes.bodyImage.height * 0.75,
         this.sizes.leftLegImage.width,
         this.sizes.leftLegImage.height,
       );
-
-      this.renderWeapon(position);
     }
 
 
-    renderWeapon(leftLegPosition: Vector2D) {
+    renderWeapon(leftArmPosition: Vector2D) {
       this.weaponPosition = {
-        x: leftLegPosition.x + this.sizes.leftLegImage.width * 1.5,
+        x: leftArmPosition.x + this.sizes.leftArmImage.width * 0.8,
         y: this.position.y + 10,
       };
       this.canvasCtx.drawImage(
