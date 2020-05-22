@@ -132,7 +132,7 @@ class Player implements GameObject {
       this.renderPlayer();
       this.renderBullets();
 
-      if (this.lastShot && (Date.now() - this.lastShot) < 100) {
+      if ((Date.now() - this.lastShot) < 100) {
         this.canvasCtx.drawImage(
           this.shotGunImage,
           this.weaponPosition.x + this.sizes.weaponImage.width,
