@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Game
-      v-if="isTargetsAdded"
+      v-if="isGameStarted"
       :target-keys="targets"
       @win="onWin"
     />
@@ -44,7 +44,7 @@ export default defineComponent({
   setup() {
     const targets = ref([]);
     const winnerName = ref('');
-    const isTargetsAdded = computed(() => targets.value.length > 0);
+    const isGameStarted = computed(() => targets.value.length > 0);
 
     const onWin = (name: string): void => {
       targets.value = [];
@@ -58,7 +58,7 @@ export default defineComponent({
     return {
       targets,
       winnerName,
-      isTargetsAdded,
+      isGameStarted,
       onWin,
       startNewGame,
     };
