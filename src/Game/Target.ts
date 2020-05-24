@@ -1,7 +1,7 @@
-import { GameObject, ObjectSize, Vector2D } from '@/types/common';
+import { ObjectSize, TargetObject, Vector2D } from '@/types/common';
 import { gameConfig, targetSize } from '@/gameConfig';
 
-export default class Target implements GameObject {
+export default class Target implements TargetObject {
   private canvasCtx: CanvasRenderingContext2D
 
   key: string;

@@ -16,6 +16,7 @@
     "decko": "^1.2.0",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
+    "vue-confetti": "^2.0.8",
     "vue-property-decorator": "^8.4.1"
   },
   "devDependencies": {

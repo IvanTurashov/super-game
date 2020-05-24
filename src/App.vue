@@ -2,14 +2,22 @@
   <div id="app">
     <Game
       v-if="isTargetsAdded"
-      :targets="targets"
+      :target-keys="targets"
+      @win="onWin"
     />
 
     <div
       v-else
       class="h-100 d-flex flex-row justify-content-center align-items-center"
     >
+      <winner
+        v-if="winnerName"
+        :winner-name="winnerName"
+        @new-game="startNewGame"
+      />
+
       <target-creator
+        v-else
         class="w-25"
         v-model="targets"
       />
@@ -20,25 +28,39 @@
 <script lang="ts">
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-
 import { defineComponent, ref, computed } from '@vue/composition-api';
 import Game from '@/components/Game.vue';
 import TargetCreator from '@/components/TargetCreator.vue';
+import Winner from '@/components/Winner.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
     Game,
     TargetCreator,
+    Winner,
   },
 
   setup() {
     const targets = ref([]);
+    const winnerName = ref('');
     const isTargetsAdded = computed(() => targets.value.length > 0);
+
+    const onWin = (name: string): void => {
+      targets.value = [];
+      winnerName.value = name;
+    };
+
+    const startNewGame = (): void => {
+      winnerName.value = '';
+    };
 
     return {
       targets,
+      winnerName,
       isTargetsAdded,
+      onWin,
+      startNewGame,
     };
   },
 });
