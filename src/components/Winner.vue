@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { defineComponent, onMounted } from '@vue/composition-api';
+import { defineComponent, onMounted, onUnmounted } from '@vue/composition-api';
 import VueConfetti from 'vue-confetti';
 import {
   BButton,
@@ -42,6 +42,10 @@ export default defineComponent({
 
     onMounted(() => {
       root.$confetti.start();
+    });
+
+    onUnmounted(() => {
+      root.$confetti.stop();
     });
 
     return {
