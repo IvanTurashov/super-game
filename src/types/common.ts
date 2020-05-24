@@ -9,7 +9,6 @@ export interface Vector2D {
 }
 
 export interface GameObject {
-  bullets?: Array<GameObject>;
   position: Vector2D;
   size: ObjectSize;
   render(): void;

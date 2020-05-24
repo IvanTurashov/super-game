@@ -4,6 +4,11 @@ declare module '*.vue' {
   export default Vue;
 }
 
+declare module '*.png' {
+  const value: string;
+  export default value;
+}
+
 declare module 'vue-confetti' {
   const value: any;
   export default value;
