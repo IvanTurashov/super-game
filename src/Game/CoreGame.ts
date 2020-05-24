@@ -44,6 +44,7 @@ class Game implements CoreGame {
     this.renderTargets();
     Collision.checkCollision(this.player.bullets, this.targets, this.shoot);
     window.requestAnimationFrame(() => {
+      this.renderTargets();
       this.render();
     });
   }
