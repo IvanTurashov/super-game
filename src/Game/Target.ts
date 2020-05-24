@@ -4,42 +4,54 @@ import * as TargetImage from '@/assets/bottle.png';
 export default class Target implements GameObject {
   private canvasCtx: CanvasRenderingContext2D
 
-  private speed: Vector2D;
+  private speed = 0;
 
   private image: HTMLImageElement;
+
+  position: Vector2D = { x: 0, y: 0 };
 
   key: string;
 
   size: ObjectSize;
 
-  position: Vector2D;
-
   constructor(ctx: CanvasRenderingContext2D, key: string) {
-    this.size = { width: 60, height: 70 };
+    this.size = { width: 40, height: 50 };
     this.canvasCtx = ctx;
     this.key = key;
-    this.speed = { x: 1, y: 4 };
 
-    this.position = this.startPosition;
     this.image = new Image(this.size.width, this.size.height);
     this.image.src = TargetImage.default;
+
+    this.dropTarget();
   }
 
-  private get startPosition(): Vector2D {
-    return {
-      x: this.canvasCtx.canvas.width,
-      y: 0,
+  private setStartPosition(): void {
+    const maxXPosition = this.canvasCtx.canvas.width - this.size.width;
+    const minXPosition = maxXPosition - maxXPosition / 3;
+
+    this.position = {
+      x: Math.random() * (maxXPosition - minXPosition) + minXPosition,
+      y: this.size.height * -4,
     };
   }
 
-  render(): void {
-    const directionX = Math.cbrt((this.canvasCtx.canvas.height - this.position.y) / 50);
+  private setSpeed(): void {
+    const maxSpeed = 7;
+    const minSpeed = 2;
 
-    if (directionX < 0) {
-      this.position = this.startPosition;
+    this.speed = Math.random() * (maxSpeed - minSpeed) + minSpeed;
+  }
+
+  private dropTarget(): void {
+    this.setStartPosition();
+    this.setSpeed();
+  }
+
+  render(): void {
+    if (this.position.y >= this.canvasCtx.canvas.height) {
+      this.dropTarget();
     } else {
-      this.position.x -= directionX;
-      this.position.y += this.speed.y;
+      this.position.y += this.speed;
     }
 
     this.canvasCtx.drawImage(

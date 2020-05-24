@@ -10,7 +10,6 @@ export interface Vector2D {
 
 export interface GameObject {
   key?: string;
-  bullets?: Array<GameObject>;
   position: Vector2D;
   size: ObjectSize;
   render(): void;
