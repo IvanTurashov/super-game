@@ -2,7 +2,7 @@ import { ObjectSize, Vector2D, GameObject } from '@/types/common';
 import * as BulletImage from '@/assets/shot.png';
 
 class Bullet implements GameObject {
-    size: ObjectSize = { width: 40, height: 20 }
+    size: ObjectSize = { width: 20, height: 10 }
 
     position: Vector2D
 

@@ -20,14 +20,15 @@ export default defineComponent({
   },
 
   props: {
-    targets: {
+    targetKeys: {
       type: Array,
       required: true,
     },
   },
 
   setup(
-    { targets }: { targets: Array<string> },
+    { targetKeys }: { targetKeys: Array<string> },
+    { emit },
   ) {
     const canvas = ref<HTMLCanvasElement | null>(null);
     const game = ref<CoreGame>(null);
@@ -37,11 +38,15 @@ export default defineComponent({
       const { innerWidth: width, innerHeight: height } = window;
 
       game.value = new Game(ctx!, { width, height });
-      targets.forEach((target) => game.value!.addTarget(target));
+      targetKeys.forEach((key) => game.value!.addTarget(key));
     };
 
     onMounted(() => {
       init();
+
+      canvas.value!.addEventListener('win', (e) => {
+        emit('win', (e as CustomEvent).detail.winnerName);
+      });
     });
 
     return {

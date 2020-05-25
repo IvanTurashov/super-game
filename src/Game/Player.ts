@@ -281,7 +281,7 @@ class Player implements GameObject {
 
       const bulletPosition: Vector2D = {
         x: this.weaponPosition.x + this.sizes.weaponImage.width,
-        y: this.weaponPosition.y,
+        y: this.weaponPosition.y + 3,
       };
       const dx = (targetPosition.x - bulletPosition.x);
       const dy = (targetPosition.y - bulletPosition.y);

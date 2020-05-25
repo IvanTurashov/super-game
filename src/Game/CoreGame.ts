@@ -1,6 +1,6 @@
 import { bind } from 'decko';
 import { CoreGame, GameConfig } from '@/types/Core';
-import { GameObject } from '@/types/common';
+import { GameObject, TargetObject } from '@/types/common';
 import Player from '@/Game/Player';
 import Collision from '@/Game/Collision';
 import TargetFactory from '@/Game/TargetFactory';
@@ -34,6 +34,8 @@ class Game implements CoreGame {
   shoot(bullet: GameObject, target: GameObject) {
     this.player.destroyBullet(bullet);
     this.targets = this.targets.filter((t) => t !== target);
+
+    this.emitWinner((target as TargetObject).key);
   }
 
   render() {
@@ -58,6 +60,14 @@ class Game implements CoreGame {
     this.targets.forEach((t) => {
       t.render();
     });
+  }
+
+  emitWinner(winnerName: string) {
+    const onWin = new CustomEvent('win', {
+      detail: { winnerName },
+    });
+
+    this.canvasCtx.canvas.dispatchEvent(onWin);
   }
 }
 

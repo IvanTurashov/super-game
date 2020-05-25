@@ -9,10 +9,13 @@ export interface Vector2D {
 }
 
 export interface GameObject {
-  key?: string;
   position: Vector2D;
   size: ObjectSize;
   render(): void;
+}
+
+export interface TargetObject extends GameObject {
+  key: string;
 }
 
 export interface GameGroup {
@@ -21,6 +24,6 @@ export interface GameGroup {
   add(gameObject: GameObject): void;
 }
 
-export interface Factory {
-  create(key: string): GameObject;
+export interface FactoryTargets {
+  create(key: string): TargetObject;
 }
