@@ -6,6 +6,8 @@ import Collision from '@/Game/Collision';
 import TargetFactory from '@/Game/TargetFactory';
 
 import * as Background from '@/assets/BACKGROUND.png';
+import BackgroundMusic from '@/assets/background.mp3';
+import playSound from '@/shared/utils';
 
 class Game implements CoreGame {
   private canvasCtx: CanvasRenderingContext2D;
@@ -32,6 +34,7 @@ class Game implements CoreGame {
     );
     this.backgroundImage.src = Background.default;
     this.render();
+    playSound(BackgroundMusic, true);
   }
 
   @bind

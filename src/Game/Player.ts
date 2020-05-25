@@ -14,6 +14,8 @@ import * as Weapon from '@/assets/WEAPON.png';
 import * as ShotGun from '@/assets/shot gun.png';
 import shootSound from '@/assets/shoot.mp3';
 
+import playSound from '@/shared/utils';
+
 const sizes: Record<string, ObjectSize> = {
   leftArmImage: {
     width: 325,
@@ -53,13 +55,6 @@ const sizes: Record<string, ObjectSize> = {
   },
 };
 
-const playSound = () => {
-  const tempSound = document.createElement('audio');
-  tempSound.src = shootSound;
-  tempSound.loop = false;
-  tempSound.volume = 0.1;
-  tempSound.play();
-};
 class Player implements GameObject {
     position: Vector2D
 
@@ -294,7 +289,7 @@ class Player implements GameObject {
       };
       const bullet = new Bullet(this.canvasCtx, bulletPosition, direction);
       this.bullets.push(bullet);
-      playSound();
+      playSound(shootSound);
     }
 
 
