@@ -5,6 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "page:copy": "rm -r ./docs/* && cp -R ./dist/* ./docs/",
+    "page:deploy": "yarn build && yarn page:copy",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
