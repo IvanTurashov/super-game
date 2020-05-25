@@ -25,6 +25,7 @@ import { defineComponent, ref } from '@vue/composition-api';
 import {
   BFormTags, BButton, BForm,
 } from 'bootstrap-vue';
+import startMembers from './startMembers';
 
 export default defineComponent({
   name: 'TargetsCreator',
@@ -36,7 +37,7 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const targets = ref([]);
+    const targets = ref(startMembers);
 
     const addTargets = () => {
       emit('input', targets.value);

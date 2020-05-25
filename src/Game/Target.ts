@@ -1,7 +1,7 @@
-import { GameObject, ObjectSize, Vector2D } from '@/types/common';
+import { ObjectSize, TargetObject, Vector2D } from '@/types/common';
 import * as TargetImage from '@/assets/bottle.png';
 
-export default class Target implements GameObject {
+export default class Target implements TargetObject {
   private canvasCtx: CanvasRenderingContext2D
 
   private speed = 0;
