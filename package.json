@@ -5,8 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "page:copy": "rm -r ./docs/* && cp -R ./dist/* ./docs/",
-    "page:deploy": "yarn build && yarn page:copy",
+    "page:build": "NODE_ENV='gh-pages' yarn build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
