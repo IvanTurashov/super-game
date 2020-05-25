@@ -1,3 +1,5 @@
+import throttle from 'lodash/throttle';
+
 import { ObjectSize, Vector2D, GameObject } from '@/types/common';
 import Bullet from '@/Game/Bullet';
 
@@ -11,6 +13,8 @@ import * as Head from '@/assets/player/1_head.png';
 import * as Weapon from '@/assets/WEAPON.png';
 import * as ShotGun from '@/assets/shot gun.png';
 import shootSound from '@/assets/shoot.mp3';
+
+import playSound from '@/shared/utils';
 
 const sizes: Record<string, ObjectSize> = {
   leftArmImage: {
@@ -51,13 +55,6 @@ const sizes: Record<string, ObjectSize> = {
   },
 };
 
-const playSound = () => {
-  const tempSound = document.createElement('audio');
-  tempSound.src = shootSound;
-  tempSound.loop = false;
-  tempSound.volume = 0.1;
-  tempSound.play();
-};
 class Player implements GameObject {
     position: Vector2D
 
@@ -245,9 +242,9 @@ class Player implements GameObject {
     }
 
     initEvents() {
-      this.canvasCtx.canvas.addEventListener('click', (event) => {
+      this.canvasCtx.canvas.addEventListener('click', throttle((event: MouseEvent) => {
         this.addBullet({ x: event.x, y: event.y });
-      });
+      }, 1000));
       // this.canvasCtx.canvas.addEventListener('mousemove', (event) => {
       //   this.rotateWeapon({ x: event.x, y: event.y });
       // });
@@ -292,7 +289,7 @@ class Player implements GameObject {
       };
       const bullet = new Bullet(this.canvasCtx, bulletPosition, direction);
       this.bullets.push(bullet);
-      playSound();
+      playSound(shootSound);
     }
 
 
