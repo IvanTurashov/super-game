@@ -5,6 +5,7 @@ import Player from '@/Game/Player';
 import Collision from '@/Game/Collision';
 import TargetFactory from '@/Game/TargetFactory';
 
+import * as Background from '@/assets/BACKGROUND.png';
 
 class Game implements CoreGame {
   private canvasCtx: CanvasRenderingContext2D;
@@ -14,6 +15,8 @@ class Game implements CoreGame {
   private player: Player;
 
   private targetFactory: TargetFactory;
+
+  private backgroundImage: HTMLImageElement = new Image()
 
   constructor(canvasCtx: CanvasRenderingContext2D, gameConfig: GameConfig) {
     this.canvasCtx = canvasCtx;
@@ -27,6 +30,7 @@ class Game implements CoreGame {
         y: this.canvasCtx.canvas.height - 150,
       },
     );
+    this.backgroundImage.src = Background.default;
     this.render();
   }
 
@@ -42,6 +46,7 @@ class Game implements CoreGame {
     const { canvas } = this.canvasCtx;
 
     this.canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+    this.renderBackground();
     this.player.render();
     this.renderTargets();
     Collision.checkCollision(this.player.bullets, this.targets, this.shoot);
@@ -49,6 +54,11 @@ class Game implements CoreGame {
       this.renderTargets();
       this.render();
     });
+  }
+
+  renderBackground() {
+    const { canvas } = this.canvasCtx;
+    this.canvasCtx.drawImage(this.backgroundImage, 0, 0, canvas.width, canvas.height);
   }
 
   addTarget(key: string) {
