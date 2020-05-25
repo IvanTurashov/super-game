@@ -1,4 +1,3 @@
-import { debounce } from 'decko';
 import { ObjectSize, Vector2D, GameObject } from '@/types/common';
 import Bullet from '@/Game/Bullet';
 
@@ -11,6 +10,7 @@ import * as Body from '@/assets/player/1_body.png';
 import * as Head from '@/assets/player/1_head.png';
 import * as Weapon from '@/assets/WEAPON.png';
 import * as ShotGun from '@/assets/shot gun.png';
+import shootSound from '@/assets/shoot.mp3';
 
 const sizes: Record<string, ObjectSize> = {
   leftArmImage: {
@@ -49,6 +49,14 @@ const sizes: Record<string, ObjectSize> = {
     width: 138,
     height: 193,
   },
+};
+
+const playSound = () => {
+  const tempSound = document.createElement('audio');
+  tempSound.src = shootSound;
+  tempSound.loop = false;
+  tempSound.volume = 0.1;
+  tempSound.play();
 };
 class Player implements GameObject {
     position: Vector2D
@@ -273,7 +281,7 @@ class Player implements GameObject {
 
       const bulletPosition: Vector2D = {
         x: this.weaponPosition.x + this.sizes.weaponImage.width,
-        y: this.weaponPosition.y,
+        y: this.weaponPosition.y + 3,
       };
       const dx = (targetPosition.x - bulletPosition.x);
       const dy = (targetPosition.y - bulletPosition.y);
@@ -284,7 +292,9 @@ class Player implements GameObject {
       };
       const bullet = new Bullet(this.canvasCtx, bulletPosition, direction);
       this.bullets.push(bullet);
+      playSound();
     }
+
 
     destroyBullet(bullet: GameObject) {
       this.bullets = this.bullets.filter((b) => b !== bullet);
