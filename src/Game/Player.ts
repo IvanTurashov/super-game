@@ -1,3 +1,5 @@
+import throttle from 'lodash/throttle';
+
 import { ObjectSize, Vector2D, GameObject } from '@/types/common';
 import Bullet from '@/Game/Bullet';
 
@@ -245,9 +247,9 @@ class Player implements GameObject {
     }
 
     initEvents() {
-      this.canvasCtx.canvas.addEventListener('click', (event) => {
+      this.canvasCtx.canvas.addEventListener('click', throttle((event: MouseEvent) => {
         this.addBullet({ x: event.x, y: event.y });
-      });
+      }, 1000));
       // this.canvasCtx.canvas.addEventListener('mousemove', (event) => {
       //   this.rotateWeapon({ x: event.x, y: event.y });
       // });
