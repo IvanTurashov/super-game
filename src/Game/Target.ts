@@ -31,12 +31,12 @@ export default class Target implements TargetObject {
 
     this.position = {
       x: Math.random() * (maxXPosition - minXPosition) + minXPosition,
-      y: this.size.height * -4,
+      y: Math.random() * this.size.height * 4 - this.size.height * 4,
     };
   }
 
   private setSpeed(): void {
-    const maxSpeed = 7;
+    const maxSpeed = 6;
     const minSpeed = 2;
 
     this.speed = Math.random() * (maxSpeed - minSpeed) + minSpeed;
