@@ -41,11 +41,11 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      root.$confetti.start();
+      (root as any).$confetti.start();
     });
 
     onUnmounted(() => {
-      root.$confetti.stop();
+      (root as any).$confetti.stop();
     });
 
     return {

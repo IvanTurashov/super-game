@@ -1,12 +1,13 @@
 import { ObjectSize, TargetObject, Vector2D } from '@/types/common';
 import * as TargetImage from '@/assets/bottle.png';
+import imageFlyweightFactory from '@/patterns/ImageFlyweightFactory';
+
+const targetFlyweight = imageFlyweightFactory(TargetImage.default);
 
 export default class Target implements TargetObject {
   private canvasCtx: CanvasRenderingContext2D
 
   private speed = 0;
-
-  private image: HTMLImageElement;
 
   position: Vector2D = { x: 0, y: 0 };
 
@@ -18,9 +19,6 @@ export default class Target implements TargetObject {
     this.size = { width: 40, height: 50 };
     this.canvasCtx = ctx;
     this.key = key;
-
-    this.image = new Image(this.size.width, this.size.height);
-    this.image.src = TargetImage.default;
 
     this.dropTarget();
   }
@@ -55,7 +53,7 @@ export default class Target implements TargetObject {
     }
 
     this.canvasCtx.drawImage(
-      this.image,
+      targetFlyweight.getImage(),
       this.position.x,
       this.position.y,
       this.size.width,
