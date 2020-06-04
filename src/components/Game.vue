@@ -30,11 +30,11 @@ export default defineComponent({
     { targetKeys }: { targetKeys: Array<string> },
     { emit },
   ) {
-    const canvas = ref<HTMLCanvasElement | null>(null);
+    const canvas = ref<HTMLCanvasElement>({});
     const game = ref<CoreGame>(null);
 
     const init = () => {
-      const ctx = canvas.value!.getContext('2d');
+      const ctx = canvas.value.getContext('2d');
       const { innerWidth: width, innerHeight: height } = window;
 
       game.value = new Game(ctx!, { width, height });
@@ -44,7 +44,7 @@ export default defineComponent({
     onMounted(() => {
       init();
 
-      canvas.value!.addEventListener('win', (e) => {
+      canvas.value.addEventListener('win', (e) => {
         emit('win', (e as CustomEvent).detail.winnerName);
       });
     });

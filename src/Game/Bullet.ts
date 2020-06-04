@@ -1,5 +1,8 @@
 import { ObjectSize, Vector2D, GameObject } from '@/types/common';
 import * as BulletImage from '@/assets/shot.png';
+import imageFlyweightFactory from '@/patterns/ImageFlyweightFactory';
+
+const bulletFlyweight = imageFlyweightFactory(BulletImage.default);
 
 class Bullet implements GameObject {
     size: ObjectSize = { width: 20, height: 10 }
@@ -14,8 +17,6 @@ class Bullet implements GameObject {
 
     private velocity: Vector2D
 
-    private image: HTMLImageElement
-
     constructor(canvasCtx: CanvasRenderingContext2D, position: Vector2D, direction: Vector2D) {
       this.position = position;
       this.direction = direction;
@@ -24,9 +25,6 @@ class Bullet implements GameObject {
         x: direction.x * this.speed,
         y: direction.y * this.speed,
       };
-
-      this.image = new Image(this.size.width, this.size.height);
-      this.image.src = BulletImage.default;
     }
 
     render() {
@@ -34,7 +32,7 @@ class Bullet implements GameObject {
       this.position.y += this.velocity.y;
 
       this.canvasCtx.drawImage(
-        this.image,
+        bulletFlyweight.getImage(),
         this.position.x,
         this.position.y,
         this.size.width,
