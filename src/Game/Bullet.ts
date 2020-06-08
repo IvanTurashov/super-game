@@ -30,7 +30,6 @@ class Bullet implements GameObject {
     render() {
       this.position.x += this.velocity.x;
       this.position.y += this.velocity.y;
-
       this.canvasCtx.drawImage(
         bulletFlyweight.getImage(),
         this.position.x,

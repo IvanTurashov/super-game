@@ -5,7 +5,6 @@ const playSound = (() => {
     const sound = soundStore.get(src);
 
     if (sound) {
-      sound.setAttribute('src', src);
       sound.load();
       sound.play();
 

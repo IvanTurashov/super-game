@@ -9,6 +9,9 @@ import * as Background from '@/assets/BACKGROUND.png';
 import BackgroundMusic from '@/assets/background.mp3';
 import playSound from '@/shared/utils';
 
+const backgroundImage = new Image();
+backgroundImage.src = Background.default;
+
 class Game implements CoreGame {
   private canvasCtx: CanvasRenderingContext2D;
 
@@ -18,7 +21,7 @@ class Game implements CoreGame {
 
   private targetFactory: TargetFactory;
 
-  private backgroundImage: HTMLImageElement = new Image()
+  private backgroundImage: HTMLImageElement;
 
   constructor(canvasCtx: CanvasRenderingContext2D, gameConfig: GameConfig) {
     this.canvasCtx = canvasCtx;
@@ -32,7 +35,7 @@ class Game implements CoreGame {
         y: this.canvasCtx.canvas.height - 150,
       },
     );
-    this.backgroundImage.src = Background.default;
+    this.backgroundImage = backgroundImage;
     this.render();
     playSound(BackgroundMusic, true);
   }
