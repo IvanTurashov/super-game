@@ -1,9 +1,12 @@
 import { bind } from 'decko';
-import { CoreGame, GameConfig } from '@/types/Core';
-import { GameObject, TargetObject } from '@/types/common';
 import Player from '@/Game/Player';
 import Collision from '@/Game/Collision';
 import TargetFactory from '@/Game/TargetFactory';
+import MouseWatcher from '@/Game/MouseWatcher';
+
+import { CoreGame, GameConfig } from '@/types/Core';
+import { GameObject, TargetObject } from '@/types/common';
+import { Observer } from '@/types/Observer';
 
 import * as Background from '@/assets/BACKGROUND.png';
 import BackgroundMusic from '@/assets/background.mp3';
@@ -19,6 +22,8 @@ class Game implements CoreGame {
 
   private player: Player;
 
+  private userWatcher: MouseWatcher;
+
   private targetFactory: TargetFactory;
 
   private backgroundImage: HTMLImageElement;
@@ -27,6 +32,7 @@ class Game implements CoreGame {
     this.canvasCtx = canvasCtx;
     this.canvasCtx.canvas.width = gameConfig.width;
     this.canvasCtx.canvas.height = gameConfig.height;
+    this.userWatcher = new MouseWatcher(this.canvasCtx.canvas);
     this.targetFactory = new TargetFactory(canvasCtx);
     this.player = new Player(
       this.canvasCtx,
@@ -35,6 +41,7 @@ class Game implements CoreGame {
         y: this.canvasCtx.canvas.height - 150,
       },
     );
+    this.userWatcher.attach(this.player);
     this.backgroundImage = backgroundImage;
     this.render();
     playSound(BackgroundMusic, true);

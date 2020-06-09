@@ -1,7 +1,8 @@
-import throttle from 'lodash/throttle';
 
-import { ObjectSize, Vector2D, GameObject } from '@/types/common';
 import Bullet from '@/Game/Bullet';
+import MouseWatcher from '@/Game/MouseWatcher';
+import { ObjectSize, Vector2D, GameObject } from '@/types/common';
+import { Observer, Subject } from '@/types/Observer';
 
 import RightArm from '@/assets/player/1_right arm.png';
 import LeftArm from '@/assets/player/1_left arm.png';
@@ -12,9 +13,10 @@ import Body from '@/assets/player/1_body.png';
 import Head from '@/assets/player/1_head.png';
 import Weapon from '@/assets/WEAPON.png';
 import ShotGun from '@/assets/shot gun.png';
-
 import shootSound from '@/assets/shoot.mp3';
+
 import playSound from '@/shared/utils';
+import userEvents from '@/shared/const';
 
 const leftArmImage = new Image();
 const rightArmImage = new Image();
@@ -75,7 +77,7 @@ const sizes: Record<string, ObjectSize> = {
   },
 };
 
-class Player implements GameObject {
+class Player implements GameObject, Observer {
     position: Vector2D
 
     bullets: Array<GameObject> = []
@@ -134,8 +136,6 @@ class Player implements GameObject {
         x: this.position.x + this.sizes.bodyImage.width,
         y: this.position.y + this.sizes.bodyImage.height * 0.8,
       };
-
-      this.initEvents();
     }
 
     private generateSizes(originSizes: Record<string, ObjectSize>): Record<string, ObjectSize> {
@@ -261,12 +261,14 @@ class Player implements GameObject {
       );
     }
 
-    initEvents() {
-      this.canvasCtx.canvas.addEventListener('click', throttle((event: MouseEvent) => {
-        const newBullet = this.createBullet({ x: event.x, y: event.y });
-        this.bullets.push(newBullet);
-        playSound(shootSound);
-      }, 1000));
+    update(sub: Subject) {
+      if (!(sub instanceof MouseWatcher)) {
+        return;
+      }
+
+      const newBullet = this.createBullet({ x: sub.state.x, y: sub.state.y });
+      this.bullets.push(newBullet);
+      playSound(shootSound);
     }
 
     renderBullets() {
