@@ -23,7 +23,7 @@ class Game implements CoreGame {
 
   private player: Player;
 
-  private userWatcher: MouseWatcher;
+  private mouseWatcher: MouseWatcher;
 
   private targetFactory: TargetFactory;
 
@@ -35,7 +35,7 @@ class Game implements CoreGame {
     this.canvasCtx = canvasCtx;
     this.canvasCtx.canvas.width = gameConfig.width;
     this.canvasCtx.canvas.height = gameConfig.height;
-    this.userWatcher = new MouseWatcher(this.canvasCtx.canvas);
+    this.mouseWatcher = new MouseWatcher(this.canvasCtx.canvas);
     this.targetFactory = new TargetFactory(this.canvasCtx);
     this.fireEffect = new FireEffect(this.canvasCtx);
 
@@ -46,8 +46,8 @@ class Game implements CoreGame {
         y: this.canvasCtx.canvas.height - 150,
       },
     );
-    this.userWatcher.attach(this.player);
-    this.userWatcher.attach(this.fireEffect);
+    this.mouseWatcher.attach(this.player);
+    this.mouseWatcher.attach(this.fireEffect);
     this.backgroundImage = backgroundImage;
     this.render();
     playSound(BackgroundMusic, true);
