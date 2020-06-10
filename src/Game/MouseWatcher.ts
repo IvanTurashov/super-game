@@ -1,6 +1,16 @@
 import { Observer, Subject } from '@/types/Observer';
 import { Vector2D } from '@/types/common';
 
+enum MouseButton {
+  Left = 'left',
+  Middle = 'middle',
+  Right = 'right',
+}
+
+type MouseWatcherState = {
+  clickPosition: Vector2D;
+  type: 'left' | 'right' | 'middle' | 'not_checking';
+}
 export default class MouseWatcher implements Subject {
   private observers: Observer[] = []
 
@@ -11,7 +21,10 @@ export default class MouseWatcher implements Subject {
     this.subscribeDomEvents();
   }
 
-  public state: Vector2D = { x: -1, y: -1 }
+  public state: MouseWatcherState = {
+    clickPosition: { x: -1, y: -1 },
+    type: 'not_checking',
+  }
 
   public attach(obs: Observer) {
     const isExist = this.observers.includes(obs);
@@ -30,29 +43,45 @@ export default class MouseWatcher implements Subject {
     this.observers = this.observers.filter((o) => o === obs);
   }
 
-  private setState(x: number, y: number) {
-    this.state.x = x;
-    this.state.y = y;
+  private setState(newState: MouseWatcherState) {
+    this.state = newState;
   }
 
   private isStateValidate(): boolean {
-    return (this.state.x >= 0) && (this.state.y >= 0);
+    return (this.state.clickPosition.x >= 0) && (this.state.clickPosition.y >= 0);
   }
 
   private subscribeDomEvents() {
     this.canvas.addEventListener('click', (event: MouseEvent) => {
-      this.setState(event.x, event.y);
-      this.notify();
-    });
-    document.addEventListener('keypress', (event: KeyboardEvent) => {
-      if (event.code !== 'Space' || !this.isStateValidate()) {
+      const mouseButton = (() => {
+        switch (event.button) {
+          case 0: {
+            return MouseButton.Left;
+          }
+          case 1: {
+            return MouseButton.Middle;
+          }
+          case 2: {
+            return MouseButton.Right;
+          }
+          default: {
+            return 'not_checking';
+          }
+        }
+      })();
+
+      if (mouseButton === 'not_checking') {
         return;
       }
 
+      this.setState({
+        clickPosition: {
+          x: event.x,
+          y: event.y,
+        },
+        type: mouseButton,
+      });
       this.notify();
-    });
-    this.canvas.addEventListener('mousemove', (event: MouseEvent) => {
-      this.setState(event.x, event.y);
     });
   }
 }

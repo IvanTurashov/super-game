@@ -3,6 +3,7 @@ import Player from '@/Game/Player';
 import Collision from '@/Game/Collision';
 import TargetFactory from '@/Game/TargetFactory';
 import MouseWatcher from '@/Game/MouseWatcher';
+import FireEffect from '@/Game/FireEffect';
 
 import { CoreGame, GameConfig } from '@/types/Core';
 import { GameObject, TargetObject } from '@/types/common';
@@ -26,6 +27,8 @@ class Game implements CoreGame {
 
   private targetFactory: TargetFactory;
 
+  private fireEffect: FireEffect
+
   private backgroundImage: HTMLImageElement;
 
   constructor(canvasCtx: CanvasRenderingContext2D, gameConfig: GameConfig) {
@@ -33,7 +36,9 @@ class Game implements CoreGame {
     this.canvasCtx.canvas.width = gameConfig.width;
     this.canvasCtx.canvas.height = gameConfig.height;
     this.userWatcher = new MouseWatcher(this.canvasCtx.canvas);
-    this.targetFactory = new TargetFactory(canvasCtx);
+    this.targetFactory = new TargetFactory(this.canvasCtx);
+    this.fireEffect = new FireEffect(this.canvasCtx);
+
     this.player = new Player(
       this.canvasCtx,
       {
@@ -42,6 +47,7 @@ class Game implements CoreGame {
       },
     );
     this.userWatcher.attach(this.player);
+    this.userWatcher.attach(this.fireEffect);
     this.backgroundImage = backgroundImage;
     this.render();
     playSound(BackgroundMusic, true);
@@ -61,6 +67,7 @@ class Game implements CoreGame {
     this.canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
     this.renderBackground();
     this.player.render();
+    this.fireEffect.render();
     this.renderTargets();
     Collision.checkCollision(this.player.bullets, this.targets, this.shoot);
     window.requestAnimationFrame(() => {

@@ -16,7 +16,6 @@ import ShotGun from '@/assets/shot gun.png';
 import shootSound from '@/assets/shoot.mp3';
 
 import playSound from '@/shared/utils';
-import userEvents from '@/shared/const';
 
 const leftArmImage = new Image();
 const rightArmImage = new Image();
@@ -266,7 +265,15 @@ class Player implements GameObject, Observer {
         return;
       }
 
-      const newBullet = this.createBullet({ x: sub.state.x, y: sub.state.y });
+      if (sub.state.type !== 'left') {
+        return;
+      }
+
+      const newBullet = this.createBullet({
+        x: sub.state.clickPosition.x,
+        y: sub.state.clickPosition.y,
+      });
+
       this.bullets.push(newBullet);
       playSound(shootSound);
     }
