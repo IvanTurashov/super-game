@@ -1,13 +1,20 @@
 import { bind } from 'decko';
-import { CoreGame, GameConfig } from '@/types/Core';
-import { GameObject, TargetObject } from '@/types/common';
 import Player from '@/Game/Player';
 import Collision from '@/Game/Collision';
 import TargetFactory from '@/Game/TargetFactory';
+import MouseWatcher from '@/Game/MouseWatcher';
+import FireEffect from '@/Game/FireEffect';
+
+import { CoreGame, GameConfig } from '@/types/Core';
+import { GameObject, TargetObject } from '@/types/common';
+import { Observer } from '@/types/Observer';
 
 import * as Background from '@/assets/BACKGROUND.png';
 import BackgroundMusic from '@/assets/background.mp3';
 import playSound from '@/shared/utils';
+
+const backgroundImage = new Image();
+backgroundImage.src = Background.default;
 
 class Game implements CoreGame {
   private canvasCtx: CanvasRenderingContext2D;
@@ -16,15 +23,22 @@ class Game implements CoreGame {
 
   private player: Player;
 
+  private mouseWatcher: MouseWatcher;
+
   private targetFactory: TargetFactory;
 
-  private backgroundImage: HTMLImageElement = new Image()
+  private fireEffect: FireEffect
+
+  private backgroundImage: HTMLImageElement;
 
   constructor(canvasCtx: CanvasRenderingContext2D, gameConfig: GameConfig) {
     this.canvasCtx = canvasCtx;
     this.canvasCtx.canvas.width = gameConfig.width;
     this.canvasCtx.canvas.height = gameConfig.height;
-    this.targetFactory = new TargetFactory(canvasCtx);
+    this.mouseWatcher = new MouseWatcher(this.canvasCtx.canvas);
+    this.targetFactory = new TargetFactory(this.canvasCtx);
+    this.fireEffect = new FireEffect(this.canvasCtx);
+
     this.player = new Player(
       this.canvasCtx,
       {
@@ -32,7 +46,9 @@ class Game implements CoreGame {
         y: this.canvasCtx.canvas.height - 150,
       },
     );
-    this.backgroundImage.src = Background.default;
+    this.mouseWatcher.attach(this.player);
+    this.mouseWatcher.attach(this.fireEffect);
+    this.backgroundImage = backgroundImage;
     this.render();
     playSound(BackgroundMusic, true);
   }
@@ -51,6 +67,7 @@ class Game implements CoreGame {
     this.canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
     this.renderBackground();
     this.player.render();
+    this.fireEffect.render();
     this.renderTargets();
     Collision.checkCollision(this.player.bullets, this.targets, this.shoot);
     window.requestAnimationFrame(() => {

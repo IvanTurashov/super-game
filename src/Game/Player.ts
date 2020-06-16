@@ -1,20 +1,41 @@
-import throttle from 'lodash/throttle';
 
-import { ObjectSize, Vector2D, GameObject } from '@/types/common';
 import Bullet from '@/Game/Bullet';
+import MouseWatcher from '@/Game/MouseWatcher';
+import { ObjectSize, Vector2D, GameObject } from '@/types/common';
+import { Observer, Subject } from '@/types/Observer';
 
-import * as RightArm from '@/assets/player/1_right arm.png';
-import * as LeftArm from '@/assets/player/1_left arm.png';
-import * as RightLeg from '@/assets/player/1_right leg.png';
-import * as LeftLeg from '@/assets/player/1_left leg.png';
-import * as Hend from '@/assets/player/1_hend.png';
-import * as Body from '@/assets/player/1_body.png';
-import * as Head from '@/assets/player/1_head.png';
-import * as Weapon from '@/assets/WEAPON.png';
-import * as ShotGun from '@/assets/shot gun.png';
+import RightArm from '@/assets/player/1_right arm.png';
+import LeftArm from '@/assets/player/1_left arm.png';
+import RightLeg from '@/assets/player/1_right leg.png';
+import LeftLeg from '@/assets/player/1_left leg.png';
+import Hend from '@/assets/player/1_hend.png';
+import Body from '@/assets/player/1_body.png';
+import Head from '@/assets/player/1_head.png';
+import Weapon from '@/assets/WEAPON.png';
+import ShotGun from '@/assets/shot gun.png';
 import shootSound from '@/assets/shoot.mp3';
 
 import playSound from '@/shared/utils';
+
+const leftArmImage = new Image();
+const rightArmImage = new Image();
+const leftLegImage = new Image();
+const rightLegImage = new Image();
+const bodyImage = new Image();
+const headImage = new Image();
+const hendImage = new Image();
+const weaponImage = new Image();
+const shotGunImage = new Image();
+
+leftArmImage.src = LeftArm;
+rightArmImage.src = RightArm;
+leftLegImage.src = LeftLeg;
+rightLegImage.src = RightLeg;
+bodyImage.src = Body;
+headImage.src = Head;
+hendImage.src = Hend;
+weaponImage.src = Weapon;
+shotGunImage.src = ShotGun;
 
 const sizes: Record<string, ObjectSize> = {
   leftArmImage: {
@@ -55,7 +76,7 @@ const sizes: Record<string, ObjectSize> = {
   },
 };
 
-class Player implements GameObject {
+class Player implements GameObject, Observer {
     position: Vector2D
 
     bullets: Array<GameObject> = []
@@ -75,23 +96,23 @@ class Player implements GameObject {
 
     private weaponPosition: Vector2D
 
-    private leftArmImage: HTMLImageElement = new Image()
+    private leftArmImage: HTMLImageElement
 
-    private rightArmImage: HTMLImageElement = new Image()
+    private rightArmImage: HTMLImageElement
 
-    private leftLegImage: HTMLImageElement = new Image()
+    private leftLegImage: HTMLImageElement
 
-    private rightLegImage: HTMLImageElement = new Image()
+    private rightLegImage: HTMLImageElement
 
-    private bodyImage: HTMLImageElement = new Image()
+    private bodyImage: HTMLImageElement
 
-    private headImage: HTMLImageElement = new Image()
+    private headImage: HTMLImageElement
 
-    private hendImage: HTMLImageElement = new Image()
+    private hendImage: HTMLImageElement
 
-    private weaponImage: HTMLImageElement = new Image()
+    private weaponImage: HTMLImageElement
 
-    private shotGunImage: HTMLImageElement = new Image()
+    private shotGunImage: HTMLImageElement
 
     private lastShot = 0;
 
@@ -99,23 +120,21 @@ class Player implements GameObject {
       this.position = position;
       this.canvasCtx = canvasCtx;
 
-      this.leftArmImage.src = LeftArm.default;
-      this.rightArmImage.src = RightArm.default;
-      this.leftLegImage.src = LeftLeg.default;
-      this.rightLegImage.src = RightLeg.default;
-      this.bodyImage.src = Body.default;
-      this.headImage.src = Head.default;
-      this.hendImage.src = Hend.default;
-      this.weaponImage.src = Weapon.default;
-      this.shotGunImage.src = ShotGun.default;
+      this.leftArmImage = leftArmImage;
+      this.rightArmImage = rightArmImage;
+      this.leftLegImage = leftLegImage;
+      this.rightLegImage = rightLegImage;
+      this.bodyImage = bodyImage;
+      this.headImage = headImage;
+      this.hendImage = hendImage;
+      this.weaponImage = weaponImage;
+      this.shotGunImage = shotGunImage;
 
       this.sizes = this.generateSizes(sizes);
       this.weaponPosition = {
         x: this.position.x + this.sizes.bodyImage.width,
         y: this.position.y + this.sizes.bodyImage.height * 0.8,
       };
-
-      this.initEvents();
     }
 
     private generateSizes(originSizes: Record<string, ObjectSize>): Record<string, ObjectSize> {
@@ -241,22 +260,23 @@ class Player implements GameObject {
       );
     }
 
-    initEvents() {
-      this.canvasCtx.canvas.addEventListener('click', throttle((event: MouseEvent) => {
-        this.addBullet({ x: event.x, y: event.y });
-      }, 1000));
-      // this.canvasCtx.canvas.addEventListener('mousemove', (event) => {
-      //   this.rotateWeapon({ x: event.x, y: event.y });
-      // });
-    }
+    update(sub: Subject) {
+      if (!(sub instanceof MouseWatcher)) {
+        return;
+      }
 
-    // @debounce(30)
-    // rotateWeapon(mousePosition: Vector2D) {
-    //   this.angleWeapon = Math.atan2(
-    //     mousePosition.x - this.weaponPosition.x,
-    //     mousePosition.y - this.weaponPosition.y,
-    //   );
-    // }
+      if (sub.state.type !== 'left') {
+        return;
+      }
+
+      const newBullet = this.createBullet({
+        x: sub.state.clickPosition.x,
+        y: sub.state.clickPosition.y,
+      });
+
+      this.bullets.push(newBullet);
+      playSound(shootSound);
+    }
 
     renderBullets() {
       if (!this.bullets.length) {
@@ -273,7 +293,7 @@ class Player implements GameObject {
       });
     }
 
-    addBullet(targetPosition: Vector2D) {
+    createBullet(targetPosition: Vector2D): Bullet {
       this.lastShot = Date.now();
 
       const bulletPosition: Vector2D = {
@@ -288,8 +308,8 @@ class Player implements GameObject {
         y: dy / mag,
       };
       const bullet = new Bullet(this.canvasCtx, bulletPosition, direction);
-      this.bullets.push(bullet);
-      playSound(shootSound);
+
+      return bullet;
     }
 
 

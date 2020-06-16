@@ -4,7 +4,7 @@ export default class Collision {
   static checkCollision(
     objectsA: Array<GameObject>,
     objectsB: Array<GameObject>,
-    onCollide: (obj1: GameObject, obj2: GameObject) => void,
+    onCollide: (objA: GameObject, objB: GameObject) => void,
   ): void {
     objectsA.forEach((objA) => {
       objectsB.forEach((objB) => {
