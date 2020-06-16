@@ -47,10 +47,6 @@ export default class MouseWatcher implements Subject {
     this.state = newState;
   }
 
-  private isStateValidate(): boolean {
-    return (this.state.clickPosition.x >= 0) && (this.state.clickPosition.y >= 0);
-  }
-
   private subscribeDomEvents() {
     this.canvas.addEventListener('click', (event: MouseEvent) => {
       const mouseButton = (() => {
