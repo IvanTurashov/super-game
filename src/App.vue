@@ -26,8 +26,6 @@
 </template>
 
 <script lang="ts">
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
 import { defineComponent, ref, computed } from '@vue/composition-api';
 import Game from '@/components/Game.vue';
 import TargetCreator from '@/components/TargetCreator.vue';
