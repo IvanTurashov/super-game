@@ -7,14 +7,9 @@ import FireEffect from '@/Game/FireEffect';
 
 import { CoreGame, GameConfig } from '@/types/Core';
 import { GameObject, TargetObject } from '@/types/common';
-import { Observer } from '@/types/Observer';
 
-import * as Background from '@/assets/BACKGROUND.png';
 import BackgroundMusic from '@/assets/background.mp3';
 import playSound from '@/shared/utils';
-
-const backgroundImage = new Image();
-backgroundImage.src = Background.default;
 
 class Game implements CoreGame {
   private canvasCtx: CanvasRenderingContext2D;
@@ -28,8 +23,6 @@ class Game implements CoreGame {
   private targetFactory: TargetFactory;
 
   private fireEffect: FireEffect
-
-  private backgroundImage: HTMLImageElement;
 
   constructor(canvasCtx: CanvasRenderingContext2D, gameConfig: GameConfig) {
     this.canvasCtx = canvasCtx;
@@ -48,7 +41,6 @@ class Game implements CoreGame {
     );
     this.mouseWatcher.attach(this.player);
     this.mouseWatcher.attach(this.fireEffect);
-    this.backgroundImage = backgroundImage;
     this.render();
     playSound(BackgroundMusic, true);
   }
@@ -65,7 +57,6 @@ class Game implements CoreGame {
     const { canvas } = this.canvasCtx;
 
     this.canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-    this.renderBackground();
     this.player.render();
     this.fireEffect.render();
     this.renderTargets();
@@ -74,11 +65,6 @@ class Game implements CoreGame {
       this.renderTargets();
       this.render();
     });
-  }
-
-  renderBackground() {
-    const { canvas } = this.canvasCtx;
-    this.canvasCtx.drawImage(this.backgroundImage, 0, 0, canvas.width, canvas.height);
   }
 
   addTarget(key: string) {

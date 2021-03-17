@@ -1,7 +1,11 @@
 <template>
+<div class="game">
+  <div class="game__background"/>
   <canvas
+    class="game__canvas"
     ref="canvas"
   />
+</div>
 </template>
 
 <script lang="ts">
@@ -57,8 +61,21 @@ export default defineComponent({
 </script>
 
 <style scoped>
-canvas {
-  vertical-align: top;
-  background-color: antiquewhite;
+.game {
+  position: relative;
 }
+.game__background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('~@/assets/BACKGROUND.png');
+  background-size: cover;
+}
+.game__canvas {
+  position: relative;
+  z-index: 1;
+  vertical-align: top;
+}
+
+
 </style>
